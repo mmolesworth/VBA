@@ -1,0 +1,120 @@
+Private theStack As StackString
+Private theInput() As String
+Private theOutput As String
+
+Private Sub Class_Initialize()
+    
+    Set theStack = New StackString
+   
+End Sub
+
+Public Function Translate(target As String) As String
+        
+    theInput = Split(target, " ")
+    
+    
+    For j = 1 To UBound(theInput)
+
+        Dim token As String
+        
+        token = theInput(j)
+        
+        Select Case token
+        
+            Case "AND"
+                gotOper token, 1
+                
+            Case "OR"
+                gotOper token, 1
+                
+            Case "="
+                gotOper token, 2
+                
+            Case "IF"
+                'ignore
+                
+            Case "("
+                theStack.push (token)
+                
+            Case ")"
+                gotParen token
+                
+            Case Else
+                theOutput = theOutput + " " + token
+        
+        End Select
+        
+    Next
+
+    Do While Not theStack.isEmpty
+                
+        theOutput = theOutput + " " + theStack.pop + " "
+                    
+    Loop
+    
+    Translate = theOutput
+    
+
+End Function
+
+Private Sub gotOper(opThis As String, prec1 As Integer)
+
+    Do While Not theStack.isEmpty
+        
+        Dim opTop As String
+        
+        opTop = theStack.pop
+        
+        If opTop = "(" Then
+            theStack.push (opTop)
+            Exit Do
+        
+        Else
+            Dim prec2 As Integer
+            
+            If (opTop = "AND" Or opTop = "OR") Then
+                prec2 = 1
+            
+            Else
+                prec2 = 2
+                            
+            End If
+            
+            If (prec2 < prec1) Then
+                theStack.push (opTop)
+                Exit Do
+                
+            Else
+                theOutput = theOutput + " " + opTop
+            
+            End If
+            
+        End If
+                 
+    Loop
+    
+    theStack.push (opThis)
+    
+    
+End Sub
+
+Private Sub gotParen(ch As String)
+
+    Do While Not theStack.isEmpty
+        
+        Dim chx As String
+        
+        chx = theStack.pop
+        
+        If (chx = "(") Then
+            Exit Do
+        
+        Else
+            theOutput = theOutput + " " + chx
+            
+        
+        End If
+    
+    Loop
+    
+End Sub
