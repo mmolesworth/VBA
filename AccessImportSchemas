@@ -1,0 +1,44 @@
+
+Public Sub test2()
+
+    Dim schemaXML As String
+    Dim fso As New Scripting.FileSystemObject
+    Dim txtstr As TextStream
+    Dim f As Scripting.file
+    Dim baselineFilename As String
+    Dim comparisonFilename As String
+    
+    baselineFilename = CurrentProject.Path & "\baseline.xml"
+    comparisonFilename = CurrentProject.Path & "\comparison.xml"
+
+    CurrentProject.ImportExportSpecifications.Add "baseline", fso.GetFile(baselineFilename).OpenAsTextStream.ReadAll
+    CurrentProject.ImportExportSpecifications.Add "comparison", fso.GetFile(comparisonFilename).OpenAsTextStream.ReadAll
+      
+
+End Sub
+
+Public Sub deleteAllSchemas()
+
+    Dim s As ImportExportSpecification
+    
+    For Each s In CurrentProject.ImportExportSpecifications
+        s.Delete
+        
+        
+    Next
+    
+End Sub
+
+Public Sub r()
+    
+    Dim s As ImportExportSpecification
+    
+    For Each s In CurrentProject.ImportExportSpecifications
+        Debug.Print (s.Name)
+        Debug.Print (s.XML)
+        Debug.Print (vbCrLf & vbCrLf)
+        
+        
+    Next
+    
+End Sub
