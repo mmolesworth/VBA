@@ -1,0 +1,52 @@
+Public Sub ConsolidateSheets()
+
+    Dim sheet As Worksheet
+    Dim i As Integer
+    Dim destinationSheet As Worksheet
+    Dim pasteRow As Integer
+    Dim count As Integer
+    
+    pasteRow = 1
+    count = 0
+    
+    
+    Set destinationSheet = Me.Worksheets.Add(Me.Worksheets(1))
+        
+    destinationSheet.Name = "Consolidated"
+    destinationSheet.Activate
+
+    With ActiveWindow
+        .SplitColumn = 0
+        .SplitRow = 1
+    End With
+    
+    ActiveWindow.FreezePanes = True
+    
+    
+    For i = 3 To Me.Worksheets.count
+        
+        Set sheet = Me.Worksheets(i)
+        
+        'Assumes the number of rows is less than 10,000
+        ilastrow = sheet.Range("A10000").End(xlUp).Row
+        
+        'Assumes the number of columns is less than BA
+        ilastcol = sheet.Range("BA1").End(xlToLeft).Column
+        
+        If i = 3 Then
+            sheet.Range(Cells(1, 1).Address, Cells(ilastrow, ilastcol).Address).Copy Destination:=destinationSheet.Range(Cells(pasteRow, 1).Address)
+            count = ilastrow - 1
+            
+        Else
+            sheet.Range(Cells(2, 1).Address, Cells(ilastrow, ilastcol).Address).Copy Destination:=destinationSheet.Range(Cells(pasteRow, 1).Address)
+            count = count + ilastrow
+            
+        End If
+        
+        pasteRow = pasteRow + ilastrow
+        
+    Next
+    
+
+End Sub
+
