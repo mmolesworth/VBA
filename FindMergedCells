@@ -29,3 +29,35 @@ Public Sub FindMergedCells()
     Next
     
 End Sub
+
+Public Sub UnMergeCells()
+    
+    Dim cell As Range
+    Dim copyCell As Range
+    Dim value As String
+    
+    For Each cell In Selection
+        
+        If cell.MergeCells Then
+            
+            value = cell.value
+            cell.UnMerge
+            
+            
+            Set copyCell = cell.Offset(1, 0)
+            
+            Do Until copyCell.value <> ""
+                
+                copyCell.value = value
+                
+                Set copyCell = copyCell.Offset(1, 0)
+            
+            Loop
+        
+        End If
+    
+    
+    Next
+    
+    
+End Sub
