@@ -1,0 +1,31 @@
+
+Public Sub FindMergedCells()
+    
+    Dim cell As Range
+    Dim destCell As Range
+    Dim ws As Worksheet
+    Dim selectedRange As Range
+    
+    Set selectedRange = Selection
+    
+    Set ws = ActiveWorkbook.Worksheets.Add()
+    
+    Set destCell = ws.Range("A1")
+    destCell.Value = "Merged Cell Address"
+    
+    
+    For Each cell In selectedRange
+        
+        If cell.MergeCells Then
+
+            ActiveSheet.Hyperlinks.Add anchor:=destCell, Address:="", SubAddress:= _
+            cell.Worksheet.Name & "!" & cell.AddressLocal(, , xlA1), TextToDisplay:=cell.Text
+            
+            Set destCell = destCell.Offset(1, 0)
+            
+
+        End If
+    
+    Next
+    
+End Sub
