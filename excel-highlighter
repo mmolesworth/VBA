@@ -1,0 +1,38 @@
+Public Sub highlighter()
+    
+    Dim cell As Range
+    Dim previous As String
+    Dim highlight As Boolean
+    
+    highlight = True
+    
+    For Each cell In Selection
+        
+        If previous = "" Then
+            previous = cell.Value
+            
+        End If
+        
+        If previous <> cell.Value Then
+            highlight = Not highlight
+            previous = cell.Value
+            
+        End If
+        
+        If highlight = True Then
+        
+            With cell.Interior
+                .Pattern = xlSolid
+                .PatternColorIndex = xlAutomatic
+                .ThemeColor = xlThemeColorAccent2
+                .TintAndShade = 0.799981688894314
+                .PatternTintAndShade = 0
+            End With
+            
+        End If
+        
+        
+    Next
+    
+    
+End Sub
