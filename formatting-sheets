@@ -1,0 +1,136 @@
+Public Sub FormatRulesAgenda()
+    
+    Dim original As Worksheet
+    Dim enhancements As Worksheet
+    Dim issues As Worksheet
+    Dim lastRow As Integer
+    Dim nextIssue As Integer
+    Dim nextEnhancement As Integer
+
+    nextIssue = 2
+    nextEnhancement = 2
+    
+    With ActiveWorkbook
+        
+        Set original = .Worksheets(1)
+        Set enhancements = .Worksheets.Add
+        Set issues = .Worksheets.Add
+    
+    End With
+    
+    enhancements.Name = "Enhancements"
+    issues.Name = "Issues"
+    
+    'remove unnecessary columns
+    original.Range("J1").EntireColumn.Delete
+    original.Range("I1").EntireColumn.Delete
+    
+    
+    'copy header to other sheets
+    original.Activate
+    original.Range("A1").EntireRow.Select
+    Selection.Copy
+    issues.Range("A1").PasteSpecial (xlPasteAll)
+    enhancements.Range("A1").PasteSpecial (xlPasteAll)
+    
+    'format header
+    issues.Range("A1").EntireRow.Font.Bold = True
+    enhancements.Range("A1").EntireRow.Font.Bold = True
+    
+    
+    lastRow = original.Range("A10000").End(xlUp).Row
+    
+    Dim cell As Range
+    
+    For i = 2 To lastRow
+        
+        Set cell = Range(Cells(i, 2).Address)
+        cell.EntireRow.Select
+        Selection.Copy
+        
+        If cell.Value = "Issue" Then
+            issues.Range(Cells(nextIssue, 1).Address).PasteSpecial (xlPasteAll)
+            nextIssue = nextIssue + 1
+            
+        ElseIf cell.Value = "Enhancement" Then
+            enhancements.Range(Cells(nextEnhancement, 1).Address).PasteSpecial (xlPasteAll)
+            nextEnhancement = nextEnhancement + 1
+            
+        End If
+        
+    Next
+    
+    FormatSheet issues
+    FormatSheet enhancements
+    
+    issues.Range("A:H").AutoFilter
+    enhancements.Range("A:H").AutoFilter
+   
+    issues.Activate
+    original.Delete
+    
+End Sub
+
+Public Sub FormatSheet(ws As Worksheet)
+    
+    With ws
+        .Activate
+        
+    
+        'set column widths
+        .Range("A:A").EntireColumn.ColumnWidth = 8  'ID
+        .Range("B:B").EntireColumn.ColumnWidth = 14 'issue type
+        .Range("C:C").EntireColumn.ColumnWidth = 16 'csp version
+        .Range("D:D").EntireColumn.ColumnWidth = 35 'title
+        .Range("E:E").EntireColumn.ColumnWidth = 75 'description
+        .Range("F:F").EntireColumn.ColumnWidth = 10 'status
+        .Range("G:G").EntireColumn.ColumnWidth = 12 'assignee
+        .Range("H:H").EntireColumn.ColumnWidth = 50 'notes
+
+        
+        'set wrap text
+        .Range("A:A").EntireColumn.WrapText = False 'ID
+        .Range("B:B").EntireColumn.WrapText = False 'issue type
+        .Range("C:C").EntireColumn.WrapText = False 'csp version
+        .Range("D:D").EntireColumn.WrapText = True 'title
+        .Range("E:E").EntireColumn.WrapText = True 'description
+        .Range("F:F").EntireColumn.WrapText = False 'status
+        .Range("G:G").EntireColumn.WrapText = False 'assignee
+        .Range("H:H").EntireColumn.WrapText = True 'notes
+
+        
+        'set horizontal alignment
+        .Range("A:A").EntireColumn.HorizontalAlignment = xlCenter 'ID
+        .Range("B:B").EntireColumn.HorizontalAlignment = xlCenter 'issue type
+        .Range("C:C").EntireColumn.HorizontalAlignment = xlCenter 'csp version
+        .Range("D:D").EntireColumn.HorizontalAlignment = xlLeft 'title
+        .Range("E:E").EntireColumn.HorizontalAlignment = xlLeft 'description
+        .Range("F:F").EntireColumn.HorizontalAlignment = xlCenter 'status
+        .Range("G:G").EntireColumn.HorizontalAlignment = xlLeft 'assignee
+        .Range("H:H").EntireColumn.HorizontalAlignment = xlLeft 'notes
+        .Range("I:I").EntireColumn.HorizontalAlignment = xlLeft 'created
+        .Range("J:J").EntireColumn.HorizontalAlignment = xlLeft 'created by
+        .Range("K:K").EntireColumn.HorizontalAlignment = xlLeft 'modified
+        .Range("L:L").EntireColumn.HorizontalAlignment = xlLeft 'modified by
+        
+        
+        'set horizontal alignment
+        .Range("A:A").EntireColumn.VerticalAlignment = xlTop 'ID
+        .Range("B:B").EntireColumn.VerticalAlignment = xlTop 'issue type
+        .Range("C:C").EntireColumn.VerticalAlignment = xlTop 'csp version
+        .Range("D:D").EntireColumn.VerticalAlignment = xlTop 'title
+        .Range("E:E").EntireColumn.VerticalAlignment = xlTop 'description
+        .Range("F:F").EntireColumn.VerticalAlignment = xlTop 'status
+        .Range("G:G").EntireColumn.VerticalAlignment = xlTop 'assignee
+        .Range("H:H").EntireColumn.VerticalAlignment = xlTop 'notes
+        .Range("I:I").EntireColumn.VerticalAlignment = xlTop 'created
+        .Range("J:J").EntireColumn.VerticalAlignment = xlTop 'created by
+        .Range("K:K").EntireColumn.VerticalAlignment = xlTop 'modified
+        .Range("L:L").EntireColumn.VerticalAlignment = xlTop 'modified by
+        
+        'set focus to top of sheet
+        .Range("A1").Activate
+        
+    End With
+    
+End Sub
