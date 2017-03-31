@@ -20,7 +20,10 @@ Public Sub FormatWorksheet()
         Cells.Select
         
         'add filter
-        Selection.AutoFilter
+        If ws.AutoFilterMode = False Then
+            Selection.AutoFilter
+        
+        End If
         
         'freeze top row
         With ActiveWindow
@@ -52,7 +55,5 @@ Public Sub FormatWorksheet()
         wsCounter = wsCounter + 1
         
     Loop
-    
-    
     
 End Sub
