@@ -19,10 +19,16 @@ Public Sub FormatWorksheet()
         
         Cells.Select
         
+        'align text
+        Selection.VerticalAlignment = xlTop
+        Selection.HorizontalAlignment = xlLeft
+        
         'add filter
         If ws.AutoFilterMode = False Then
             Selection.AutoFilter
-        
+        Else
+            Selection.AutoFilter
+            Selection.AutoFilter
         End If
         
         'freeze top row
@@ -51,6 +57,9 @@ Public Sub FormatWorksheet()
         Cells.EntireRow.AutoFit
     
     
+        'move cell back to origin
+        ws.Range("A1").Select
+        
         'move counter forward
         wsCounter = wsCounter + 1
         
