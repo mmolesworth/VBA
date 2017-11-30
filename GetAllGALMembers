@@ -1,0 +1,17 @@
+Sub GetAllGALMembers()'This is an Excel MacroDim i As Long, j As Long, lastRow As Long'Set up OutlookDim olApp As Outlook.ApplicationDim olNS As Outlook.NamespaceDim olGAL As Outlook.AddressListDim olEntry As Outlook.AddressEntriesDim olMember As Outlook.AddressEntry
+Set olApp = Outlook.ApplicationSet olNS = olApp.GetNamespace("MAPI")Set olGAL = olNS.GetGlobalAddressList()
+'Set Up ExcelDim wb As Workbook, ws As Worksheet
+'set the workbook:Set wb = ThisWorkbook'set the worksheet where you want to post Outlook data:Set ws = wb.Sheets("Sheet1")
+'clear all current entriesCells.SelectSelection.ClearContents
+'set and format headings in the worksheet:ws.Cells(1, 1).Value = "First Name"ws.Cells(1, 2).Value = "Last Name"ws.Cells(1, 3).Value = "Phone/Ext"ws.Cells(1, 4).Value = "Email"ws.Cells(1, 5).Value = "Title"ws.Cells(1, 6).Value = "Department"Application.ScreenUpdating = FalseWith ws.Range("A1:F1")
+.Font.Bold = True.HorizontalAlignment = xlCenter
+End With
+Set olEntry = olGAL.AddressEntriesOn Error Resume Next'first row of entriesj = 2
+' loop through dist list and extract membersFor i = 1 To olEntry.Count
+Set olMember = olEntry.Item(i)
+If olMember.AddressEntryUserType = olExchangeUserAddressEntry Then'add to worksheetws.Cells(j, 1).Value = olMember.GetExchangeUser.LastNamews.Cells(j, 2).Value = olMember.GetExchangeUser.FirstNamews.Cells(j, 3).Value = olMember.GetExchangeUser.BusinessTelephoneNumberws.Cells(j, 4).Value = olMember.GetExchangeUser.PrimarySmtpAddressws.Cells(j, 5).Value = olMember.GetExchangeUser.JobTitlews.Cells(j, 6).Value = olMember.GetExchangeUser.Departmentj = j + 1End IfNext iApplication.ScreenUpdating = True'determine last data row, basis column B (contains Last Name):lastRow = ws.Cells(Rows.Count, "B").End(xlUp).Row
+'format worksheet data area:ws.Range("A2:F" & lastRow).Sort Key1:=ws.Range("B2"), Order1:=xlAscendingws.Range("A2:F" & lastRow).HorizontalAlignment = xlLeftws.Columns("A:F").EntireColumn.AutoFit
+wb.Save
+'quit the Outlook application:applOutlook.Quit
+'clear the variables:Set olApp = NothingSet olNS = NothingSet olGAL = Nothing
+End Sub
