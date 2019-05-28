@@ -1,3 +1,30 @@
+Public Sub DebugPaste(sep As String, ParamArray values() As Variant)
+
+    Dim value As Variant
+    Dim outputString As String
+    Dim index As Integer
+    Dim upperBound As Integer
+    
+    outputString = ""
+    upperBound = UBound(values())
+    
+    For index = 0 To upperBound
+        
+        If index < upperBound Then
+            outputString = outputString & CStr(values(index)) & sep
+            
+        Else
+            outputString = outputString & CStr(values(index))
+        
+        End If
+        
+    Next
+    
+    Debug.Print (outputString)
+    
+    
+End Sub
+
 Public Function Paste(sep As String, ParamArray values() As Variant) As String
 
     Dim value As Variant
